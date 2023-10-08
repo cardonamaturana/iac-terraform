@@ -145,8 +145,10 @@ sudo apt install docker.io -y
 # Comprueba la versión de Docker instalada
 docker --version
 
-sudo apt install docker-compose
+sudo apt-get -y install docker-compose
 
+
+wait
 
 # Obteniendo repositorio
 
@@ -163,8 +165,9 @@ git checkout linux
 cd jenkins
 
 cd jenkins-alpine
-
-
+echo "*******************************************"
+echo "**********Instalando docker compose********"
+echo "*******************************************"
 sudo docker-compose up -d
 
 
