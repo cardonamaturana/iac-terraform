@@ -135,7 +135,7 @@ sudo apt install docker.io -y
 docker --version
 
 echo "staring docker-compose installing"
-sudo apt install docker-compose
+sudo apt install docker-compose -y
 
 EOF
 
