@@ -122,10 +122,21 @@ resource "aws_instance" "reto-backend-pragma-java" {
     aws_security_group.allow_ssh.id, aws_security_group.allow_https.id,
     aws_security_group.allow_http.id
   ]
-  user_data              = var.initial_script_instance
+  user_data              =  <<-EOF
+#!/bin/bash
+# Actualiza la lista de paquetes
+sudo apt update
+
+# Instala Docker desde los repositorios oficiales
+sudo apt install docker.io -y
+
+# Comprueba la versión de Docker instalada
+docker --version
+EOF
 
 
-  tags = {
+
+tags = {
     Extra_Tag = local.extra_tag
     Name      = "EC2-${each.key}"
   }

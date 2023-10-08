@@ -22,8 +22,4 @@ variable "ssh_key_path" {
   type        = string
 }
 
-variable "initial_script_instance" {
-  description = "initial_script_instance"
-  type = string
-}
 
