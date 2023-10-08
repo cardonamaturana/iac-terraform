@@ -95,6 +95,7 @@ resource "aws_security_group" "allow_http" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+
   # Regla de salida por defecto (permite todoo el tráfico saliente)
   egress {
     from_port   = 0
@@ -132,6 +133,10 @@ sudo apt install docker.io -y
 
 # Comprueba la versión de Docker instalada
 docker --version
+
+echo "staring docker-compose installing"
+sudo apt install docker-compose
+
 EOF
 
 
