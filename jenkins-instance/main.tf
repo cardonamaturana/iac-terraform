@@ -168,6 +168,9 @@ cd jenkins-alpine
 echo "*******************************************"
 echo "**********Instalando docker compose********"
 echo "*******************************************"
+
+waiit
+
 sudo docker-compose up -d
 
 
