@@ -169,7 +169,7 @@ echo "*******************************************"
 echo "**********Instalando docker compose********"
 echo "*******************************************"
 
-waiit
+wait
 
 sudo docker-compose up -d
 
