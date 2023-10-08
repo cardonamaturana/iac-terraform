@@ -14,3 +14,13 @@ output "ssh-path" {
 
 }
 
+
+output "jenkins-url" {
+  value = {
+    for service, i in aws_instance.reto-backend-pragma-java : service =>
+    "http://${i.public_ip}:8182"
+  }
+
+}
+
+
