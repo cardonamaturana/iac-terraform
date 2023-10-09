@@ -22,4 +22,9 @@ variable "ssh_key_path" {
   type        = string
 }
 
+variable "initial_script"{
+  description = "initial_script"
+  type = string
+
+}
 

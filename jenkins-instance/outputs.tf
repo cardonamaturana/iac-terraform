@@ -24,3 +24,20 @@ output "jenkins-url" {
 }
 
 
+output "asset-mongo-db-url" {
+  value = {
+    for service, i in aws_instance.reto-backend-pragma-java : service =>
+    "http://${i.public_ip}:27018"
+  }
+
+}
+
+
+output "assignee-mongo-db-url" {
+  value = {
+    for service, i in aws_instance.reto-backend-pragma-java : service =>
+    "http://${i.public_ip}:27017"
+  }
+
+}
+

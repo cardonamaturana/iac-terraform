@@ -86,16 +86,6 @@ resource "aws_security_group" "allow_http" {
   description = "Allow HTTP inbound traffic"
   vpc_id      = aws_default_vpc.default.id
 
-  # Regla de entrada para HTTP (puerto 80)
-  ingress {
-    description = "HTTP from anywhere"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-
   # Nueva regla HTTP de entrada para el puerto 8182
   ingress {
     description = "Custom HTTP on port 8182"
@@ -120,7 +110,7 @@ resource "aws_security_group" "allow_http" {
 
 }
 locals {
-  extra_tag   = "jenkins-instance"
+  extra_tag   = "reto-backend-aws-pragma"
   environment = "develop"
   purpose     = "CI/CD"
 }
@@ -134,47 +124,7 @@ resource "aws_instance" "reto-backend-pragma-java" {
     aws_security_group.allow_ssh.id, aws_security_group.allow_https.id,
     aws_security_group.allow_http.id
   ]
-  user_data = <<-EOF
-#!/bin/bash
-# Actualiza la lista de paquetes
-sudo apt update
-
-# Instala Docker desde los repositorios oficiales
-sudo apt install docker.io -y
-
-# Comprueba la versión de Docker instalada
-docker --version
-
-sudo apt-get -y install docker-compose
-
-
-wait
-
-# Obteniendo repositorio
-
-git clone https://github.com/cardonamaturana/continuous-integration.git
-
-wait
-
-cd continuous-integration
-#pasando a la rama de linux para que este correcto
-
-git checkout linux
-
-#entramos a la carpeta jenkins
-cd jenkins
-
-cd jenkins-alpine
-echo "*******************************************"
-echo "**********Instalando docker compose********"
-echo "*******************************************"
-
-wait
-
-sudo docker-compose up -d
-
-
-EOF
+  user_data = var.initial_script
 
 
 
