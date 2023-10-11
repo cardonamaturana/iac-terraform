@@ -124,7 +124,52 @@ resource "aws_instance" "reto-backend-pragma-java" {
     aws_security_group.allow_ssh.id, aws_security_group.allow_https.id,
     aws_security_group.allow_http.id
   ]
-  user_data = var.initial_script
+  user_data = <<-EOF
+#!/bin/bash
+
+cd /
+
+# Actualiza la lista de paquetes
+sudo apt update
+
+# Instala Docker desde los repositorios oficiales
+sudo apt install docker.io -y
+
+# Comprueba la versión de Docker instalada
+docker --version
+
+sudo apt-get -y install docker-compose
+
+
+wait
+
+# Obteniendo repositorio
+
+git clone https://github.com/cardonamaturana/continuous-integration.git
+
+wait
+
+cd continuous-integration
+#pasando a la rama de linux para que este correcto
+
+git checkout linux
+
+#entramos a la carpeta jenkins
+cd jenkins
+
+cd jenkins-alpine
+echo "*******************************************"
+echo "**********Instalando docker compose********"
+echo "*******************************************"
+
+wait
+
+sudo docker-compose up -d
+
+docker run  --name=redis-data --volume=/redis-data:/data -p 6379:6379  -t -d redis
+sudo docker ps
+EOF
+
 
 
 
