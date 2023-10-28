@@ -12,5 +12,18 @@ output "ssh-path" {
     "ssh -i /c/Users/Usuario/.ssh/id_rsa ubuntu@${i.public_ip}"
   }
 
+
+
 }
+
+output "eip" {
+  value = {
+    for service, i in aws_eip.reto_eip : service =>
+    "${i.public_ip}"
+  }
+
+
+
+}
+
 

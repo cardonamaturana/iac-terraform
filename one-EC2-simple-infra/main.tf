@@ -153,7 +153,7 @@ resource "aws_instance" "reto-backend-pragma-java" {
 resource "aws_eip" "reto_eip" {
   for_each = var.instances_names
   instance = aws_instance.reto-backend-pragma-java[each.value].id
-  vpc      = true
+  domain = "vpc"
 }
 
 resource "aws_eip_association" "reto_eip_association" {
