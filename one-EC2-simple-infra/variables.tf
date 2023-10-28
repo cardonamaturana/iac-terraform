@@ -21,5 +21,3 @@ variable "ssh_key_path" {
   description = "ssh_key_path"
   type        = string
 }
-
-

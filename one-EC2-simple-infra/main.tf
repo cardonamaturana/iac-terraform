@@ -95,6 +95,22 @@ resource "aws_security_group" "allow_http" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "HTTP from anywhere"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "HTTP from anywhere"
+    from_port   = 8081
+    to_port     = 8081
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
 
   # Regla de salida por defecto (permite todoo el tráfico saliente)
   egress {
@@ -115,37 +131,35 @@ locals {
 }
 
 resource "aws_instance" "reto-backend-pragma-java" {
-  for_each               = var.instances_names
-  ami                    = data.aws_ami.ubuntu_20_04.id
-  instance_type          = "t2.micro"
-  key_name               = aws_key_pair.deployer.key_name
+  for_each      = var.instances_names
+  ami           = data.aws_ami.ubuntu_20_04.id
+  instance_type = "t2.micro"
+  key_name      = aws_key_pair.deployer.key_name
   vpc_security_group_ids = [
     aws_security_group.allow_ssh.id, aws_security_group.allow_https.id,
     aws_security_group.allow_http.id
   ]
-  user_data              =  <<-EOF
-#!/bin/bash
-# Actualiza la lista de paquetes
-sudo apt update
-
-# Instala Docker desde los repositorios oficiales
-sudo apt install docker.io -y
-
-# Comprueba la versión de Docker instalada
-docker --version
-
-echo "staring docker-compose installing"
-sudo apt install docker-compose -y
-
-EOF
+  user_data = file("ops_setup.sh")
 
 
 
-tags = {
+  tags = {
     Extra_Tag = local.extra_tag
     Name      = "EC2-${each.key}"
   }
 
+}
+
+resource "aws_eip" "reto_eip" {
+  for_each = var.instances_names
+  instance = aws_instance.reto-backend-pragma-java[each.value].id
+  vpc      = true
+}
+
+resource "aws_eip_association" "reto_eip_association" {
+  allocation_id = aws_eip.reto_eip[each.key].id
+  for_each      = var.instances_names
+  instance_id   = aws_instance.reto-backend-pragma-java[each.value].id
 }
 
 
