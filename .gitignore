@@ -304,6 +304,6 @@ terraform.rc
 /tfplan
 /main/.terraform.lock.hcl
 /*/tfplan
-
+*.sh
 *.terraform.lock.hcl
 
